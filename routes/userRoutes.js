@@ -10,6 +10,7 @@ const {
   welcome,
   editUser,
   getAllUsers,
+  getUserDetails
 } = require("../controllers/userControllers");
 
 const upload = require("../middlewares/multer");
@@ -28,4 +29,5 @@ router.put("/edit-profile/:id", upload.single("image"), editUser);
 
 router.get("/get-all-users", getAllUsers);
 
+router.get("/getUserDetails/:id",getUserDetails)
 module.exports = router;

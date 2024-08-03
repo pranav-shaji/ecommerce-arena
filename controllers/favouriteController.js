@@ -54,16 +54,26 @@ module.exports = {
           ],
         });
         res.status(200).send({ message: "favourite created" });
-      } else {
-        await favourite.updateOne(
-          { userId },
-          { $addToSet: { products: { productId } } }
+      }
+      else {
+        // Check if the product already exists in the user's favourites
+        const productExists = favExist.products.some(
+          (product) => product.productId.toString() === productId.toString()
         );
-        res.status(200).send({ message: "product added to favourites" });
+      
+        if (productExists) {
+          res.status(200).send({ message: "Product already in favourites" });
+        } else {
+          await favourite.updateOne(
+            { userId },
+            { $addToSet: { products: { productId } } }
+          );
+          res.status(200).send({ message: "Product added to favourites" });
+        }
       }
     } catch (error) {
       console.log(error);
       res.status(500).send({ message: "Internal Server Error" });
     }
   },
-};
+};``

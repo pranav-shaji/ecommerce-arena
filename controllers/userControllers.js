@@ -12,7 +12,7 @@ const transporter = require("../utils/nodemailer");
 
 module.exports = {
   signUp: async (req, res) => {
-    console.log("ehdewuifh");
+    
     let { username, email, password, admin, user, profile } = req.body;
     let { address, phone, district, housename, landmark, pincode } = profile;
     if (!username || !email || !password) {
@@ -188,7 +188,7 @@ module.exports = {
   getAllUsers: async (req, res) => {
     try {
       console.log("jfweb");
-      let result = await user.find();
+      let result = await User.find();
       res
         .status(200)
         .json({ message: "list of users are as follows!", data: result });
@@ -197,6 +197,26 @@ module.exports = {
       res.status(500).json({ message: "server error" });
     }
   },
+  getUserDetails:async(req,res)=>{
+    try {
+      const userId = req.params.id;
+      console.log(userId);
+      result = await User.findById(userId)
+      if (result) {
+        res.status(200).send({result:result})
+        
+      }else{
+        res.status(404).send({message:"user not found"})
+      }
+      
+    } catch (error) {
+      console.log(error);
+      res.status(500).send({message:"server error"})
+      
+    }
+  
+  },
+  
 
   welcome: (req, res) => {
     res.status(200).send({ message: "welcome to Laptop Arena" });
