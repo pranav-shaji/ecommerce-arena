@@ -2,19 +2,18 @@ require("dotenv").config();
 
 const express = require("express");
 const app = express();
+const cors = require("cors");
+
+app.use(express.json());
+app.use(cors());
 
 const passport = require("passport");
 const session = require("express-session");
-
-const cors = require("cors");
 
 const passportSetup = require("./utils/passport");
 
 const dbconnection = require("./configs/databaseConfig");
 dbconnection();
-
-app.use(express.json());
-app.use(cors());
 
 // Configure session middleware
 app.use(

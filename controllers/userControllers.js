@@ -12,9 +12,9 @@ const transporter = require("../utils/nodemailer");
 
 module.exports = {
   signUp: async (req, res) => {
-    
-    let { username, email, password, admin, user, profile } = req.body;
-    let { address, phone, district, housename, landmark, pincode } = profile;
+    console.log(req.body);
+
+    let { username, email, password } = req.body;
     if (!username || !email || !password) {
       return res.status(405).send({ message: "please fill all the fields" });
     }
@@ -26,17 +26,7 @@ module.exports = {
         await User.create({
           username: username,
           email: email,
-          password: hashedpassword,
-          admin: admin,
-          user: user,
-          profile: {
-            address: address,
-            phone: phone,
-            district: district,
-            housename: housename,
-            landmark: landmark,
-            pincode: pincode,
-          },
+          password: hashedpassword
         });
         return res.status(200).send({ message: "user created" });
       } else {
@@ -142,7 +132,6 @@ module.exports = {
     try {
       let updateField = {};
 
-     
       if (req.file) {
         const imageurl = await UploadImageToFireBase(req.file, req.body.name);
         updateField["profile.image"] = imageurl;
@@ -197,26 +186,21 @@ module.exports = {
       res.status(500).json({ message: "server error" });
     }
   },
-  getUserDetails:async(req,res)=>{
+  getUserDetails: async (req, res) => {
     try {
       const userId = req.params.id;
       console.log(userId);
-      result = await User.findById(userId)
+      result = await User.findById(userId);
       if (result) {
-        res.status(200).send({result:result})
-        
-      }else{
-        res.status(404).send({message:"user not found"})
+        res.status(200).send({ result: result });
+      } else {
+        res.status(404).send({ message: "user not found" });
       }
-      
     } catch (error) {
       console.log(error);
-      res.status(500).send({message:"server error"})
-      
+      res.status(500).send({ message: "server error" });
     }
-  
   },
-  
 
   welcome: (req, res) => {
     res.status(200).send({ message: "welcome to Laptop Arena" });
